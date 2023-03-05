@@ -1,0 +1,46 @@
+name: messylab
+help: Aplicacion para el manejo de los laboratorios
+version: 0.1.0
+
+dependencies:
+  ping:
+  host:
+  ssh:
+
+args:
+- name: target
+  help: "Labs filename"
+
+flags:
+- long: --list
+  short: -l
+  help: Lista los resultados para cada uno de los hosts
+  conflicts: [--wake-up, --shutdown]
+  
+- long: --hostname
+  short: -h
+  arg: remote_host
+  help: Hostname para consultar
+
+- long: --users
+  short: -u
+  help: Cambia el comportamiento para que liste los usuarios conectados
+  conflicts: [--wake-up, --shutdown]
+
+- long: --wake-up
+  short: -w
+  arg: username
+  help: Despierta todas las maquinas del LABORATORIO proporcionadas
+  conflicts: [--list, --users]
+
+- long: --shutdown
+  short: -s
+  arg: username
+  help: Apaga todas las maquinas del LABORATORIO proporcionadas
+  conflicts: [--list, --users]
+
+examples:
+- messylab -l lab102.txt
+- messylab -luh 155.210.154.100
+- messylab -wh 155.210.154.100
+- messylab -sh 155.210.154.100
