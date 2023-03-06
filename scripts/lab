@@ -35,6 +35,7 @@ lab_usage() {
   # :command.usage_commands
   printf "%s\n" "Commands:"
   printf "  %s   Scans machines and shows if they are reachable\n" "scan    "
+  printf "  %s   Executes a command or a script in the remote machine\n" "exec    "
   printf "  %s   Wakes up a specific machine in the laboratory\n" "wake    "
   printf "  %s   Shut down a selected machine in the laboratory\n" "shutdown"
   echo
@@ -111,6 +112,69 @@ lab_scan_usage() {
     printf "%s\n" "Examples:"
     printf "  messylab sL 155.210.154.201\n"
     printf "  messylab sL -u 155.210.154.201\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+lab_exec_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "lab exec - Executes a command or a script in the remote machine\n"
+    echo
+
+  else
+    printf "lab exec - Executes a command or a script in the remote machine\n"
+    echo
+
+  fi
+
+  printf "Alias: e\n"
+  echo
+
+  printf "%s\n" "Usage:"
+  printf "  lab exec [HOSTNAME] [COMMAND] [OPTIONS]\n"
+  printf "  lab exec --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--script-file, -s FILEPATH"
+    printf "    Allows to pass as script file to the remote machine\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--flood, -f FILEPATH"
+    printf "    Allows to pass as data source a text file with the target addresses.\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "%s\n" "Arguments:"
+
+    # :argument.usage
+    printf "  %s\n" "HOSTNAME"
+    printf "    Machine where the command will be executed\n"
+    echo
+
+    # :argument.usage
+    printf "  %s\n" "COMMAND"
+    printf "    Command to be executed in the remote machine\n"
+    echo
+
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  messylab e 155.210.154.201 ls\n"
+    printf "  messylab e -s script.sh 155.210.154.201\n"
+    printf "  messylab e -s script.sh -s targets.txt 155.210.154.201\n"
     echo
 
   fi
@@ -385,6 +449,15 @@ lab_scan_command() {
 }
 
 # :command.function
+lab_exec_command() {
+  # src/exec_command.sh
+  # echo "# this file is located in 'src/scan_command.sh'"
+  # echo "# you can edit it freely and regenerate (it will not be overwritten)"
+  # inspect_args
+
+}
+
+# :command.function
 lab_wake_command() {
   # src/wake_command.sh
   # echo "# this file is located in 'src/wake_command.sh'"
@@ -582,6 +655,13 @@ parse_requirements() {
       shift $#
       ;;
 
+    exec | e)
+      action="exec"
+      shift
+      lab_exec_parse_requirements "$@"
+      shift $#
+      ;;
+
     wake | w)
       action="wake"
       shift
@@ -701,6 +781,91 @@ lab_scan_parse_requirements() {
         if [[ -z ${args['hostname']+x} ]]; then
 
           args['hostname']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
+
+        ;;
+
+    esac
+  done
+
+}
+
+# :command.parse_requirements
+lab_exec_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        lab_exec_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.dependencies_filter
+
+  # :command.command_filter
+  action="exec"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --script-file | -s)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--script-file']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--script-file requires an argument: --script-file, -s FILEPATH" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --flood | -f)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--flood']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--flood requires an argument: --flood, -f FILEPATH" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        if [[ -z ${args['hostname']+x} ]]; then
+
+          args['hostname']=$1
+          shift
+        elif [[ -z ${args['command']+x} ]]; then
+
+          args['command']=$1
           shift
         else
           printf "invalid argument: %s\n" "$key" >&2
@@ -887,6 +1052,15 @@ run() {
         lab_scan_usage
       else
         lab_scan_command
+      fi
+      ;;
+
+    "exec")
+      if [[ ${args['--help']:-} ]]; then
+        long_usage=yes
+        lab_exec_usage
+      else
+        lab_exec_command
       fi
       ;;
 

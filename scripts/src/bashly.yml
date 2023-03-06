@@ -34,6 +34,33 @@ commands:
   - messylab sL 155.210.154.201
   - messylab sL -u 155.210.154.201
 
+- name: exec
+  alias: e
+  help: Executes a command or a script in the remote machine
+
+  args:
+  - name: hostname
+    help: Machine where the command will be executed
+
+  - name: command
+    help: Command to be executed in the remote machine
+
+  flags:
+  - long: --script-file
+    short: -s
+    arg: filepath
+    help: Allows to pass as script file to the remote machine
+
+  - long: --flood
+    short: -f
+    arg: filepath
+    help: Allows to pass as data source a text file with the target addresses.
+
+  examples:
+  - messylab e 155.210.154.201 ls
+  - messylab e -s script.sh 155.210.154.201
+  - messylab e -s script.sh -s targets.txt 155.210.154.201
+
 - name: wake
   alias: w
   help: Wakes up a specific machine in the laboratory
