@@ -2,10 +2,10 @@ name: lab
 help: Sample application that uses the default command option
 version: 0.1.0
 
-# dependencies:
-#   - ping
-#   - ssh
-#   - host
+dependencies:
+  - ping
+  - ssh
+  - host
     
 commands:
 - name: scan
