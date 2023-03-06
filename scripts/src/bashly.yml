@@ -1,46 +1,77 @@
-name: messylab
-help: Aplicacion para el manejo de los laboratorios
+name: lab
+help: Sample application that uses the default command option
 version: 0.1.0
 
-dependencies:
-  ping:
-  host:
-  ssh:
+# dependencies:
+#   - ping
+#   - ssh
+#   - host
+    
+commands:
+- name: scan
+  alias: sL
+  help: Scans machines and shows if they are reachable
 
-args:
-- name: target
-  help: "Labs filename"
+  args:
+  - name: hostname
+    help: Machine to scan
 
-flags:
-- long: --list
-  short: -l
-  help: Lista los resultados para cada uno de los hosts
-  conflicts: [--wake-up, --shutdown]
+  flags:
+  - long: --all
+    short: -a
+    help: Target all machines
+
+  - long: --users
+    short: -u
+    help: Show connected users
+
+  - long: --file
+    short: -f
+    arg: filepath
+    help: Allows to pass as data source a text file with the target addresses.
+
+  examples:
+  - messylab sL 155.210.154.201
+  - messylab sL -u 155.210.154.201
+
+- name: wake
+  alias: w
+  help: Wakes up a specific machine in the laboratory
+
+  args:
+  - name: hostname
+    help: Machine to wake
+
+  flags:
+  - long: --all
+    short: -a
+    help: Target all machines
+
+  - long: --file
+    short: -f
+    arg: filepath
+    help: Allows to pass as data source a text file with the target addresses.
   
-- long: --hostname
-  short: -h
-  arg: remote_host
-  help: Hostname para consultar
+  examples:
+  - messylab w 155.210.154.201
 
-- long: --users
-  short: -u
-  help: Cambia el comportamiento para que liste los usuarios conectados
-  conflicts: [--wake-up, --shutdown]
+- name: shutdown
+  alias: s
+  help: Shut down a selected machine in the laboratory
 
-- long: --wake-up
-  short: -w
-  arg: username
-  help: Despierta todas las maquinas del LABORATORIO proporcionadas
-  conflicts: [--list, --users]
+  args:
+  - name: hostname
+    help: Machine to shut down
 
-- long: --shutdown
-  short: -s
-  arg: username
-  help: Apaga todas las maquinas del LABORATORIO proporcionadas
-  conflicts: [--list, --users]
+  flags:
+  - long: --all
+    short: -a
+    help: Target all machines
+    
+  - long: --file
+    short: -f
+    arg: filepath
+    help: Allows to pass as data source a text file with the target addresses.
 
-examples:
-- messylab -l lab102.txt
-- messylab -luh 155.210.154.100
-- messylab -wh 155.210.154.100
-- messylab -sh 155.210.154.100
+  examples:
+  - messylab s 155.210.154.201
