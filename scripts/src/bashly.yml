@@ -19,7 +19,7 @@ commands:
   flags:
   - long: --all
     short: -a
-    help: Target all machines
+    help: Target all machines (Labs)
 
   - long: --users
     short: -u
@@ -46,6 +46,18 @@ commands:
     help: Command to be executed in the remote machine
 
   flags:
+  - long: --all
+    short: -a
+    help: Target all machines (Labs)
+
+  - long: --output
+    short: -o
+    help: Save the output of executed scripts
+
+  - long: --mask
+    short: -m
+    help: Sets a custom mask, default 500
+
   - long: --script-file
     short: -s
     arg: filepath
@@ -72,7 +84,7 @@ commands:
   flags:
   - long: --all
     short: -a
-    help: Target all machines
+    help: Target all machines (Labs)
 
   - long: --file
     short: -f
@@ -93,7 +105,7 @@ commands:
   flags:
   - long: --all
     short: -a
-    help: Target all machines
+    help: Target all machines (Labs)
     
   - long: --file
     short: -f

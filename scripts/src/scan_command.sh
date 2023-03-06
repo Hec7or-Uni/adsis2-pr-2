@@ -24,7 +24,7 @@ if [[ $flag_file ]]; then
             target_list+=("$linea")
         done < $flag_file
     else 
-        echo "No existe"
+        echo "File $flag_file does not exist"
         exit 1  
     fi
 else
@@ -80,7 +80,7 @@ for addr in "${target_list[@]}"; do
 
     if [[ $flag_users ]]; then
 
-        if echo $status | grep -q 'DOWN'; then break;
+        if echo $status | grep -q 'DOWN'; then continue;
         else 
             ssh_output=$(ssh -qt -o ConnectTimeout=2 -o StrictHostKeyChecking=no $account@$addr "who | cut -f1 -d' ' | sort -u")
             for user in $ssh_output; do

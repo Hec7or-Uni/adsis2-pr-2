@@ -23,7 +23,7 @@ if [[ $flag_file ]]; then
             target_list+=("$linea")
         done < $flag_file
     else 
-        echo "No existe"
+        echo "File $flag_file does not exist"
         exit 1  
     fi
 else

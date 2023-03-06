@@ -20,8 +20,8 @@ if [[ $flag_file ]]; then
             target_list+=("$linea")
         done < $flag_file
     else 
-        echo "No existe"
-        exit 1
+        echo "File $flag_file does not exist"
+        exit 1  
     fi
 else
     if [[ $flag_all ]]; then
@@ -51,7 +51,7 @@ for addr in "${target_list[@]}"; do
     # Prueba de conexion con el target
     if ! ping -c 1 -W 2 $addr >/dev/null 2>&1; then
         echo "can't connect to: $addr"
-        break
+        continue
     fi
     set +x
     # comprobar el numero de usuarios conectados a la maquina
@@ -60,7 +60,7 @@ for addr in "${target_list[@]}"; do
 
     if [ $num_users -gt 1 ]; then
         echo "La maquina esta siendo usada por mas de un usuario"
-        break
+        continue
     fi
 
     # obtiene las maquinas virtuales que se estan ejecutando en la maquina $addr
@@ -69,10 +69,10 @@ for addr in "${target_list[@]}"; do
     # comprueba si hay maquinas virtuales en ejecucion
     if [ $vm_running -eq 1 ]; then
         echo "Hay $vm_running maquina virtual ejecutandose"
-        break
+        continue
     elif [ $vm_running -gt 1 ]; then
         echo "Hay $vm_running maquinas virtuales ejecutandose"
-        break
+        continue
     fi
 
     # # Busqueda del nombre del host
