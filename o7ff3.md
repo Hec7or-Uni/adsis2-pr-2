@@ -62,7 +62,7 @@ cd /var/nsd/zones
 doas touch 7.ff.es.eu.org.directo
 doas touch 7.ff.es.eu.org.inverso
 
-doas nsd-checkzone ff.es.eu.org.
+doas nsd-checkzone 7.ff.es.eu.org.
 doas nsd-checkzone 7.0.b.6.3.7.0.7.4.0.1.0.0.2.ip6.arpa.
 ```
 
@@ -87,7 +87,7 @@ doas nsd-control reload 7.0.b.6.3.7.0.7.4.0.1.0.0.2.ip6.arpa
 # en el esclavo
 doas nsd-control force_transfer 7.ff.es.eu.org
 doas nsd-control force_transfer 7.0.b.6.3.7.0.7.4.0.1.0.0.2.ip6.arpa
-# comprobar si se actualiza la version (esclavo??)
+# comprobar si se actualiza la version
 doas nsd-control zonestatus
 # Volcar la BBDD al fichero de zona en el esclavo (esclavo)
 doas nsd-control write 7.ff.es.eu.org

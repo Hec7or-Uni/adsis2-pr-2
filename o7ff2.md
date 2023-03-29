@@ -85,7 +85,7 @@ pruebitas de resolucion
 ```
 host ns1.6.ff.es.eu.org.
 host 2001:470:736b:7ff::3
-dig @2001:470:736b:7ff::2 ns1.6.ff.es.eu.org
+dig @2001:470:736b:7ff::2 ns1.7.ff.es.eu.org
 dig @2001:470:736b:7ff::2 -x 2001:470:736b:7ff::2
 ```
 
